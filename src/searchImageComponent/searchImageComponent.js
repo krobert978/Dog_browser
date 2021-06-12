@@ -36,8 +36,8 @@ class SearchImage extends ContentComponent {
 
   // ez a metódus megjelenít egy képet (véletlenszerűen)
   displayImage(data) {
-    this.clearErrors();
-    this.clearContent();
+    // this.clearErrors();
+    // this.clearContent();
     const image = document.createElement('img');
     // a data.message tömbből egy véletlenszerű elemet kiválasztunk
     image.src = data.message[Math.floor(Math.random() * data.message.length)];
@@ -45,13 +45,13 @@ class SearchImage extends ContentComponent {
     // console.log(data);
   }
 
-
   // megjeleníti a keresőt:
   render() {
     const markup = `
     <form class="dog-search">
       <span class="search-icon"></span>
       <input type="text" id="dogSearchInput">
+      <input type="text" id="imageNumberInput" placeholder="1">
       <button>Search</button>
     </form>
     `;
@@ -62,6 +62,14 @@ class SearchImage extends ContentComponent {
       event.preventDefault();
       // console.log(event);
       const searchTerm = document.querySelector('#dogSearchInput').value;
+      // 2.feladat
+      let inputValue = parseInt(document.querySelector('#imageNumberInput').value);
+      let count;
+      if (isNaN(inputValue) === true) {
+        count = 1;
+      } else {
+        count = inputValue;
+      }
       // mivel a getImages egy async method, ezért ez is promise-al tér vissza
       // emiatt, a promise object-en amit a getImages visszaad, elérhető a .then() metódus
       // a then metódus bementi paramétere egy callback funciton, ami akkor fut le amikor
@@ -69,11 +77,18 @@ class SearchImage extends ContentComponent {
       // ha az arrow funciton-ben csak egy bemeneti paraméter van, akkor a zárójel elhagyható
       this.getImages(searchTerm).then(result => {
         // ha csak egy dolgot kell csinálni az if block-ban, akkor a kódblokk {} elhagyható
-        if (result) this.displayImage(result);
+        if (result) {
+          this.clearErrors(); // 2.feladat
+          this.clearContent();
+          for (let i = 1; i <= count; i++) {
+            this.displayImage(result);
+          }
+        }
       });
     });
-
   }
+
+
 }
 
 export default SearchImage;
