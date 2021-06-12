@@ -13,7 +13,6 @@ class SearchImage extends ContentComponent {
 
   // Ez a metódus letölti az adatot az API-ról
   async getImages(dogbreed) {
-
     if (!dogbreed) {
       this.displayError('Nem lett beírva semmi a keresőbe, nem tudunk keresni!');
       // megállítjuk a getImages függvény futását
@@ -21,7 +20,8 @@ class SearchImage extends ContentComponent {
     }
 
     let urlString = '';
-    dogbreed = dogbreed.split(' ');
+    dogbreed = dogbreed.toLowerCase().split(' '); // 1.feladat - toLowerCase
+    // dogbreed = dogbreed.split(' ');
     // a dogbreed változó mostmár egy tömb!
     if (dogbreed.length === 1) {
       urlString = `https://dog.ceo/api/breed/${dogbreed[0]}/images`;
