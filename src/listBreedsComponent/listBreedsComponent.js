@@ -56,10 +56,8 @@ class ListBreeds extends ContentComponent {
         }
       }
     } else { // 3.feladat - local storage
-      const breed = [];
       for (let i = 0; i < dogs.length; i++) {
-        breed[i] = dogs[i];
-        this.createListItem(breed[i]);
+        this.createListItem(dogs[i]);
       }
     }
   }
