@@ -7,7 +7,6 @@ class ListBreeds extends ContentComponent {
   constructor() {
     super();
     this.render();
-
   }
 
   async getFullList() {
@@ -18,20 +17,22 @@ class ListBreeds extends ContentComponent {
     }
     const data = await response.json();
     return data;
-
   }
-  createListItem(title) {
 
+  createListItem(title) {
     const item = document.createElement('div');
     item.classList.add('breed-list-item');
     item.innerHTML = title;
+    item.addEventListener('click', () => {
+      this.handleContentDisplay(title);
+      this.setSearchTerm(title);
+    });
 
     document.querySelector('#content').appendChild(item);
   }
 
   displayList(results) {
     // a result.message egy object, amin végig megyünk key:value páronként..
-
     for (const breed in results.message) {
       // ha a value (ami egy tömb) hossza nem nulla
       if (results.message[breed].length !== 0) {
@@ -49,9 +50,7 @@ class ListBreeds extends ContentComponent {
         dogs.push(breed);
       }
     }
-
   }
-
   render() {
     const button = document.createElement('button');
     button.classList.add('list-button');
@@ -63,6 +62,7 @@ class ListBreeds extends ContentComponent {
       this.getFullList().then(results => { results && this.displayList(results); });
     };
     document.querySelector('#header').appendChild(button);
+
   }
 }
 
