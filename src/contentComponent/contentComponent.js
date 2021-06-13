@@ -51,7 +51,6 @@ export default class ContentComponent {
 
   setSearchTerm(term) {
     document.querySelector('#dogSearchInput').value = term;
-    console.log(term);
   }
 
   // Ez a metódus letölti az adatot az API-ról

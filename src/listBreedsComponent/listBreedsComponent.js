@@ -10,13 +10,17 @@ class ListBreeds extends ContentComponent {
   }
 
   async getFullList() {
-    const response = await fetch('https://dog.ceo/api/breeds/list/all');
-    if (response.status === 404) {
-      this.displayError('Page not found!');
-      return;
+    if (dogs.length === 0) { // 3.feladat - local storage
+      const response = await fetch('https://dog.ceo/api/breeds/list/all');
+      if (response.status === 404) {
+        this.displayError('Page not found!');
+        return;
+      }
+      const data = await response.json();
+      return data;
+    } else {
+      this.displayList(dogs);
     }
-    const data = await response.json();
-    return data;
   }
 
   createListItem(title) {
@@ -32,22 +36,30 @@ class ListBreeds extends ContentComponent {
   }
 
   displayList(results) {
-    // a result.message egy object, amin végig megyünk key:value páronként..
-    for (const breed in results.message) {
-      // ha a value (ami egy tömb) hossza nem nulla
-      if (results.message[breed].length !== 0) {
-        // akkor végmegyünk a tömbön, és kiírjuk a fajtákat, alfajjal együtt,
-        for (const subBreed of results.message[breed]) {
-          // minden alfaj mögé odaírjuk a főfaj nevét... pl: 
-          // boston bulldog, french bulldog, stb...
-          this.createListItem(subBreed + ' ' + breed);
-          dogs.push(subBreed + ' ' + breed);
+    if (dogs.length === 0) { // 3.feladat - local storage
+      // a result.message egy object, amin végig megyünk key:value páronként..
+      for (const breed in results.message) {
+        // ha a value (ami egy tömb) hossza nem nulla
+        if (results.message[breed].length !== 0) {
+          // akkor végmegyünk a tömbön, és kiírjuk a fajtákat, alfajjal együtt,
+          for (const subBreed of results.message[breed]) {
+            // minden alfaj mögé odaírjuk a főfaj nevét... pl: 
+            // boston bulldog, french bulldog, stb...
+            this.createListItem(subBreed + ' ' + breed);
+            dogs.push(subBreed + ' ' + breed);
+          }
+        } else {
+          // ha nincs alfaj (a tömb hossza nulla)
+          // akkor csak a főfajt jelenítjük meg
+          this.createListItem(breed);
+          dogs.push(breed);
         }
-      } else {
-        // ha nincs alfaj (a tömb hossza nulla)
-        // akkor csak a főfajt jelenítjük meg
-        this.createListItem(breed);
-        dogs.push(breed);
+      }
+    } else { // 3.feladat - local storage
+      const breed = [];
+      for (let i = 0; i < dogs.length; i++) {
+        breed[i] = dogs[i];
+        this.createListItem(breed[i]);
       }
     }
   }
